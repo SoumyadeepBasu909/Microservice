@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microservice App</title>
+    <script>
+        async function fetchItems() {
+            const response = await fetch('http://localhost:3000/api/items');
+            const items = await response.json();
+            const itemsList = document.getElementById('items-list');
+            itemsList.innerHTML = '';
+            items.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item.name;
+                itemsList.appendChild(li);
+            });
+        }
+
+        async function addItem() {
+            const name = document.getElementById('item-name').value;
+            if (!name) {
+                alert('Name is required');
+                return;
+            }
+            await fetch('http://localhost:3000/api/items', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name }),
+            });
+            document.getElementById('item-name').value = '';
+            fetchItems();
+        }
+    </script>
+</head>
+<body>
+    <h1>Microservice App</h1>
+    <h2>Items</h2>
+    <ul id="items-list"></ul>
+    <h2>Add New Item</h2>
+    <input type="text" id="item-name" placeholder="Enter item name">
+    <button onclick="addItem()">Add Item</button>
+    <script>
+        fetchItems();
+    </script>
+</body>
+</html>
