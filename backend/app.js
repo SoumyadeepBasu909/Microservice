@@ -1,6 +1,6 @@
 // Import the required modules
 const express = require('express');
-const mysql = require('mysql');
+const mysql = require('mysql2'); // Use the mysql2 client
 const bodyParser = require('body-parser');
 
 // Initialize the Express app
@@ -15,10 +15,10 @@ app.use(cors());
 
 // MySQL connection configuration
 const db = mysql.createConnection({
-    host: 'localhost', // Replace with your MySQL host
-    user: 'root',      // Replace with your MySQL username
-    password: 'Soumya@1998', // Replace with your MySQL password
-    database: 'testdb',   // Replace with your database name
+    host: process.env.DB_HOST || 'mysql', // Use environment variable (mysql-1) or fallback to localhost
+    user: process.env.DB_USER || 'root',      // MySQL root username
+    password: process.env.DB_PASSWORD || 'my-secret-pw', // MySQL password
+    database: process.env.DB_NAME || 'testdb', // The database name
 });
 
 // Connect to MySQL

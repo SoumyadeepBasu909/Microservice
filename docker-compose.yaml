@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8000:80"
+    networks:
+      - my_network
+
+  backend:
+    build: ./backend  # Path to your backend Dockerfile
+    ports:
+      - "3000:3000"   # Expose backend to port 3000
+    depends_on:
+      mysql:
+        condition: service_healthy  # Ensure the backend waits for MySQL to be healthy
+    environment:
+      - DB_HOST=mysql     # The name of the MySQL service/container
+      - DB_PORT=3306        # Default MySQL port
+      - DB_USER=root        # MySQL root username
+      - DB_PASSWORD=my-secret-pw  # MySQL root password
+      - DB_NAME=testdb      # Database name
+    networks:
+      - my_network
+
+  mysql:
+    image: mysql:8.0   # Ensure you are using a compatible version
+    environment:
+      MYSQL_ROOT_PASSWORD: my-secret-pw
+      MYSQL_DATABASE: testdb   # Automatically create the database during initialization
+      MYSQL_ROOT_HOST: '%'     # Allow root access from any host
+      MYSQL_AUTHENTICATION_PLUGIN: mysql_native_password # Set default auth plugin
+    ports:
+      - "3306:3306"      # Expose MySQL to port 3306
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql   # Mount the SQL script to initialize the database
+    networks:
+      - my_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pmy-secret-pw"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+
+networks:
+  my_network:
+    driver: bridge
