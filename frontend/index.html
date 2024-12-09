@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Microservice App</title>
     <script>
+        // Update the backend URL to use the Kubernetes service name for backend
+        const BACKEND_URL = 'http://localhost:30010/api/items';
+
         async function fetchItems() {
-            const response = await fetch('http://localhost:3000/api/items');
+            const response = await fetch(BACKEND_URL);
             const items = await response.json();
             const itemsList = document.getElementById('items-list');
             itemsList.innerHTML = '';
@@ -23,7 +26,7 @@
                 alert('Name is required');
                 return;
             }
-            await fetch('http://localhost:3000/api/items', {
+            await fetch(BACKEND_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -43,6 +46,7 @@
     <input type="text" id="item-name" placeholder="Enter item name">
     <button onclick="addItem()">Add Item</button>
     <script>
+        // Call fetchItems() on page load to populate the list
         fetchItems();
     </script>
 </body>

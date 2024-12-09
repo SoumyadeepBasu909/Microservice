@@ -15,7 +15,7 @@ app.use(cors());
 
 // MySQL connection configuration
 const db = mysql.createConnection({
-    host: process.env.DB_HOST || 'mysql', // Use environment variable (mysql-1) or fallback to localhost
+    host: process.env.DB_HOST || 'mysql.my-app.svc.cluster.local', // Use environment variable (mysql-1) or fallback to localhost
     user: process.env.DB_USER || 'root',      // MySQL root username
     password: process.env.DB_PASSWORD || 'my-secret-pw', // MySQL password
     database: process.env.DB_NAME || 'testdb', // The database name
