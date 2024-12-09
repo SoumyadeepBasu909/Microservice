@@ -4,7 +4,9 @@ RUN apt-get update && apt-get install -y nodejs npm
 
 WORKDIR /app
 
-COPY package*.json .
+COPY package*.json /app/
+
+RUN ls -la /app
 
 RUN npm install
 
