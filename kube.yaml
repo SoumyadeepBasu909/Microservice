@@ -35,7 +35,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: soumyadeep0112/test_docker-frontend:latest
+          image: {{FRONTEND_IMAGE}}
           ports:
             - containerPort: 80
 ---
@@ -71,7 +71,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: soumyadeep0112/test_docker-backend:latest
+          image: {{BACKEND_IMAGE}}
           ports:
             - containerPort: 3000
           env:
